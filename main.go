@@ -1,0 +1,112 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"html/template"
+	"io"
+	"log"
+	"os"
+	"strings"
+
+	"github.com/butbetter-id/dev/core"
+)
+
+func init() {
+	core.NewLogger()
+}
+
+// list of available command.
+var cmd = []*core.Command{
+	runCommand,
+	makeCommand,
+}
+
+func main() {
+	flag.Usage = showUsage
+	flag.Parse()
+	log.SetFlags(0)
+
+	// if no argument passes, show usage,
+	args := flag.Args()
+	if len(args) < 1 {
+		showUsage()
+	}
+
+	// show help when argument is help
+	if args[0] == "help" {
+		showHelp(args[1:])
+		return
+	}
+
+	// check the argument is registered as command.
+	for _, c := range cmd {
+		if c.Name == args[0] && c.IsRunable() {
+			c.Flag.Usage = func() {
+				c.ShowUsage()
+			}
+
+			if c.CustomFlags {
+				args = args[1:]
+			} else {
+				c.Flag.Parse(args[1:])
+				args = c.Flag.Args()
+			}
+
+			os.Exit(c.Run(c, args))
+			return
+		}
+	}
+
+	core.LogError(fmt.Sprintf("Unknown command %q.", args[0]))
+	core.LogError("Run 'dev help' to see list of command")
+	os.Exit(2)
+}
+
+// showUsage print usage message into cli.
+func showUsage() {
+	var usageTexts = "dev (tools) is cli tools for go projects.\n\nUsage:\n\tdev [command] [arguments]\n\nThe command available are:\n {{range .}}\n\t{{.Name | printf \"%-11s\"}} {{.Info}}{{end}}\n\nUse 'dev help [command]' for more information about a command.\n"
+
+	compileTemplate(os.Stdout, usageTexts, cmd)
+	os.Exit(2)
+}
+
+// showHelp print help message into cli.
+func showHelp(args []string) {
+	if len(args) == 0 {
+		showUsage()
+		return
+	}
+
+	if len(args) != 1 {
+		core.LogError("Too many arguments given.")
+		core.LogError("Usage: \n\tdev help command.")
+		os.Exit(2)
+	}
+
+	arg := args[0]
+	for _, c := range cmd {
+		if c.Name == arg {
+			helpText := "Usage:\n\tdev {{.Name}}\n\n{{.Info}}\n\n{{.Usage | trim}}"
+			compileTemplate(os.Stdout, helpText, c)
+			return
+		}
+	}
+
+	core.LogError(fmt.Sprintf("Unknown help topic %#q.", arg))
+	core.LogError("Run 'dev help' to see list of topic")
+	os.Exit(2)
+}
+
+// compileTemplate, compiling html/template into writer with data command.
+func compileTemplate(w io.Writer, text string, data interface{}) {
+	t := template.New("top")
+	t.Funcs(template.FuncMap{"trim": func(s template.HTML) template.HTML {
+		return template.HTML(strings.TrimSpace(string(s)))
+	}})
+
+	template.Must(t.Parse(text))
+	if err := t.Execute(w, data); err != nil {
+		panic(err)
+	}
+}
