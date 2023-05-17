@@ -14,7 +14,7 @@ package model
 import (
 	{{timePkg}}
 
-	"github.com/butbetter-id/orm"
+	"github.com/env-io/orm"
 )
 
 {{modelStruct}}

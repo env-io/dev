@@ -8,7 +8,7 @@ var RequestHeader = `
 package {{PackageName}}
 
 import (
-	"github.com/butbetter-id/validate"
+	"github.com/env-io/validate"
 )
 `
 

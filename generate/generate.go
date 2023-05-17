@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/butbetter-id/dev/core"
+	"github.com/env-io/dev/core"
 )
 
 func DirExist(path string) bool {

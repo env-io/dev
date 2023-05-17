@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/butbetter-id/dev/core"
-	"github.com/butbetter-id/dev/generate"
+	"github.com/env-io/dev/core"
+	"github.com/env-io/dev/generate"
 )
 
 var makeCommand = &core.Command{

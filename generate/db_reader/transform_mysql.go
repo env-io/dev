@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/butbetter-id/dev/core"
+	"github.com/env-io/dev/core"
 	_ "github.com/go-sql-driver/mysql"
 )
 

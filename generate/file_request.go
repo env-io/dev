@@ -6,8 +6,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/butbetter-id/dev/core"
-	"github.com/butbetter-id/dev/generate/stubs"
+	"github.com/env-io/dev/core"
+	"github.com/env-io/dev/generate/stubs"
 )
 
 func FileRequest(name string, tpl *core.StubTemplate) {

@@ -7,9 +7,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/butbetter-id/dev/core"
-	dbReader "github.com/butbetter-id/dev/generate/db_reader"
-	"github.com/butbetter-id/dev/generate/stubs"
+	"github.com/env-io/dev/core"
+	dbReader "github.com/env-io/dev/generate/db_reader"
+	"github.com/env-io/dev/generate/stubs"
 )
 
 func FileModel(driver string, conn string, selectedTables string, tpl *core.StubTemplate) {

@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/butbetter-id/dev/core"
+	"github.com/env-io/dev/core"
 )
 
 var (
