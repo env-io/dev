@@ -1,4 +1,4 @@
-module github.com/butbetter-id/dev
+module github.com/env-io/dev
 
 go 1.16
 
